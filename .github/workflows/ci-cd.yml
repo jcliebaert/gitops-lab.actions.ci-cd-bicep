@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      configuratiobn: release
+      configuration: release
 
     steps:
     - name: Checkout Sources
