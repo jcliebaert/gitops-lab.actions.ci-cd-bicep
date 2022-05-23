@@ -15,9 +15,7 @@ env:
 
 jobs:
   Build-Job:
-
     runs-on: ubuntu-latest
-
     env:
       configuration: release
 
@@ -51,8 +49,7 @@ jobs:
   
   RG-Job:
     runs-on: ubuntu-latest
-    needs: 
-      - Build-Job
+    needs: [ Build-Job ]
     steps:
       - name: Login to azure
         uses: azure/login@v1
