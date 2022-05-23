@@ -54,9 +54,47 @@ jobs:
       - name: Login to azure
         uses: azure/login@v1
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+          creds: $ {{ secrets.AZURE_CREDENTIALS }}
       - name: Create Azure Resource Group
         uses: azure/CLI@v1
         with:
           inlineScript: |
             az group create --name ${{ env.AZURE_RG }} --location ${{ env.AZURE_LOCATION }}
+
+  Dev-Job:
+    runs-on: ubuntu-latest
+    environment: development
+    needs: [RG-Job ]
+    env: AZURE-WEBAPP-NAME: techoramajcl-mywebapp-dev
+    steps:
+      - name: Download templates artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: templates_artifact
+          path: ${{ runner.temp }}/templates
+      - name: Login to azure
+        uses: azure/login@v1
+        with:
+          creds: $ {{ secrets.AZURE_CREDENTIALS }}
+      - name: Deploy BICEP template
+        uses: azure/arm-deploy@v1
+        id: deploywebappd
+        with:
+          deploymentName: create-webapp
+          subscriptionId: 8986d317-de76-4b66-88d3-8c637573841d
+          resourceGroupName: ${ env.AZURE_RG }}
+          template: ${{ runner.temp }}/templates/webapp.bicep
+          parameters: location=${{ env.AZURE_LOCATION }} appName=${{ env.AZURE-WEBAPP-NAME }}
+      - name: Download webapp artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: publish_artifact
+          path: ${{ runner.temp }}/publish
+      - name: Publish webapp
+        uses: azure/webapp-deploy@v2
+        with:
+          app-name: ${{ steps.deploywebappd.outputs.webappname }}
+          package: ${{ runner.temp }}/publish
+      
+
+    
