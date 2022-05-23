@@ -9,7 +9,7 @@ on:
     branches: [ main ]
 
 env:
-  AZURE_RG: github-actions-staged
+  AZURE_RG: techorama-lab2
   AZURE_SUBSCRIPTION: 8986d317-de76-4b66-88d3-8c637573841d
   AZURE_LOCATION: eastUS
 
@@ -60,8 +60,3 @@ jobs:
         with:
           inlineScript:
             az group create --name ${{ env.AZURE_RG }} --location ${{ env.AZURE_LOCATION }}
-            
-        
-    
-
-  
