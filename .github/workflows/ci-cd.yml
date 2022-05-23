@@ -65,7 +65,8 @@ jobs:
     runs-on: ubuntu-latest
     environment: development
     needs: [RG-Job ]
-    env: AZURE-WEBAPP-NAME: techoramajcl-mywebapp-dev
+    env: 
+      AZURE-WEBAPP-NAME: techoramajcl-mywebapp-dev
     steps:
       - name: Download templates artifact
         uses: actions/download-artifact@v3
